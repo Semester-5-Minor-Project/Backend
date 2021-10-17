@@ -6,8 +6,8 @@
 | SID | Name |
 | --- | ---- |
 | 19103057 | Shubh Ashish |
-| 19103088 | Yuvraj Singh Deol |
 | 19103087 | Prajval Bandha |
+| 19103088 | Yuvraj Singh Deol |
 | 19103094 | Yogesh Adhikari |
 
 <hr/>
