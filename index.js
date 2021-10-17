@@ -8,6 +8,9 @@ require('dotenv').config()
 // routers
 const indexRouter = require("./routes/index");
 const superRouter = require("./routes/superadmin");
+const dseRouter = require("./routes/dseut");
+const schoolRouter = require("./routes/school");
+const principalRouter = require("./routes/principal");
 
 const app = express();
 
@@ -30,6 +33,9 @@ app.use(express.static(path.join(__dirname, "public")));
 // routes
 app.use("/", indexRouter);
 app.use("/sadmin", superRouter);
+app.use("/dse", dseRouter);
+app.use("/school", schoolRouter);
+app.use("/principal", principalRouter);
 
 const PORT = 5000 | process.env.PORT;
 
