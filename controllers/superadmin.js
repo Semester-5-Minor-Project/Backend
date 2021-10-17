@@ -9,10 +9,9 @@ const SALTROUNDS = 5;
 const SECRET = process.env.HASH_SECRET;
 
 exports.getAdmin = async (req, res) => {
-    const name = "admin-001";
-    const password = "123456789";
+    const { username, password } = req.body;
 
-    const admin = SuperAdmin.findOne(
+    const admin = await SuperAdmin.findOne(
         {
             username: name,
             password: password
@@ -28,12 +27,12 @@ exports.getAdmin = async (req, res) => {
 }
 
 exports.addDse = async (req, res) => {
-    const nanoid = customAlphabet('123456789abcdefghijklmnopqrstuvwxyz', 8);
+    const nanoid = customAlphabet("123456789abcdefghijklmnopqrstuvwxyz", 8);
 
     const { username } = req.body;
-
+    const password = nanoid();
     try {
-        await bcrypt.hash(nanoid(), SALTROUNDS, (err, hash) => {
+        await bcrypt.hash(password, SALTROUNDS, (err, hash) => {
             const dse = DSEUT.create(
                 {
                     username,
@@ -43,7 +42,7 @@ exports.addDse = async (req, res) => {
             if(!dse) {
                 throw new Error("Failed to create DSE.");
             }
-            res.json(dse);
+            res.json(password);
         })
     } catch(e) {
         console.log(e);
