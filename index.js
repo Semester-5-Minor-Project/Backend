@@ -2,6 +2,7 @@ const express = require("express");
 const path = require("path");
 const morgan = require("morgan")
 const mongoose = require("mongoose");
+const fileUpload = require('express-fileupload');
 
 require('dotenv').config()
 
@@ -11,6 +12,8 @@ const superRouter = require("./routes/superadmin");
 const dseRouter = require("./routes/dseut");
 const schoolRouter = require("./routes/school");
 const principalRouter = require("./routes/principal");
+const deoRouter = require("./routes/deoschool");
+const studentRouter = require("./routes/student");
 
 const app = express();
 
@@ -26,6 +29,9 @@ mongoose.connect(`mongodb+srv://${process.env.DATABASE_USER}:${process.env.DATAB
 app.use(morgan("dev"));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+app.use(fileUpload({
+    useTempFiles: true
+}));
 
 // static
 app.use(express.static(path.join(__dirname, "public")));
@@ -36,6 +42,8 @@ app.use("/sadmin", superRouter);
 app.use("/dse", dseRouter);
 app.use("/school", schoolRouter);
 app.use("/principal", principalRouter);
+app.use("/deo", deoRouter);
+app.use("/student", studentRouter);
 
 const PORT = 5000 | process.env.PORT;
 
