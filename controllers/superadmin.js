@@ -13,7 +13,7 @@ exports.getAdmin = async (req, res) => {
 
     const admin = await SuperAdmin.findOne(
         {
-            username: name,
+            username,
             password: password
         }
     )

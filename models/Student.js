@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const School = require("./School");
 const { ObjectId } = mongoose.Schema;
 
 const studentSchema = new mongoose.Schema(
@@ -39,7 +40,7 @@ const studentSchema = new mongoose.Schema(
         },
         CWSN_category: {
             type: String,
-            enum: ["Category1", "Category2"]
+            required: false
         },
         email: {
             type: String,
@@ -50,6 +51,10 @@ const studentSchema = new mongoose.Schema(
         },
         photoURL: {
             type: String
+        },
+        currentSchool: {
+            type: ObjectId,
+            ref: School
         }
     }
 )
