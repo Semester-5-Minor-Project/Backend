@@ -34,9 +34,8 @@ exports.addPrincipal = async (req, res) => {
 
 exports.listPrincipals = async (req, res) => {
     try {
-        const principals = await Principal.find({}, "name", (err, results) => {
-            res.json(results);
-        });
+        const principals = await Principal.find({}, "name");
+        res.send(principals);
     } catch(e) {
         console.log(e);
     }
