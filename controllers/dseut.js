@@ -18,9 +18,9 @@ exports.getDSE = async (req, res) => {
     if(dse) {
         bcrypt.compare(password, dse.password, (err, result) => {
             if(result) {
-                res.json("Match.");
+                res.status(200).send(dse["username"]);
             } else {
-                res.json(
+                res.status(500).json(
                     {
                         message: "Incorrect password"
                     }
@@ -28,7 +28,7 @@ exports.getDSE = async (req, res) => {
             }
         })
     } else {
-        res.json(
+        res.status(500).json(
             {
                 message: "No such user exists"
             }

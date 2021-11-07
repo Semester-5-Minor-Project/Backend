@@ -19,24 +19,60 @@ exports.addPrincipal = async (req, res) => {
         const principal = Principal.create(
             {
                 username,
-                password : hash,
+                password: hash,
                 emp_id,
                 name,
                 principal_id
             }
         )
-        if(!principal) {
+        if (!principal) {
             throw new Error("Failed to add Principal.");
         }
-        res.json(password);
+        res.status(200).json(password);
     })
+}
+
+exports.getPrincipal = async (req, res) => {
+    const { username, password } = req.params;
+
+    try {
+        const principal = await Principal.findOne({
+            username
+        });
+
+        if (principal) {
+            bcrypt.compare(password, principal.password, (err, result) => {
+                if (result) {
+                    res.status(200).send({
+                        id: principal["principal_id"], 
+                        name: principal["name"], 
+                        school: principal["school"]
+                    });
+                } else {
+                    res.status(500).json(
+                        {
+                            message: "Incorrect password"
+                        }
+                    )
+                }
+            })
+        } else {
+            res.status(500).json(
+                {
+                    message: "User does not exist."
+                }
+            );
+        }
+    } catch (err) {
+
+    }
 }
 
 exports.listPrincipals = async (req, res) => {
     try {
         const principals = await Principal.find({}, "name");
         res.send(principals);
-    } catch(e) {
+    } catch (e) {
         console.log(e);
     }
 }

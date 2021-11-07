@@ -33,7 +33,7 @@ exports.addSchool = async (req, res) => {
         )
 
         if(school) {
-            res.json(
+            res.status(200).json(
                 {
                     message: "School added."
                 }

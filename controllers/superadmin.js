@@ -42,7 +42,7 @@ exports.addDse = async (req, res) => {
             if(!dse) {
                 throw new Error("Failed to create DSE.");
             }
-            res.json(password);
+            res.status(200).json(password);
         })
     } catch(e) {
         console.log(e);

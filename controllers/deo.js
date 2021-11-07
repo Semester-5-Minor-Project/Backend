@@ -35,7 +35,7 @@ exports.addDeo = async (req, res) => {
                 res.status(200).json({username, password});
             })
         } else {
-            res.json(
+            res.status(500).json(
                 {
                     message: "No such school exists."
                 }
@@ -55,13 +55,17 @@ exports.getDeo = async (req, res) => {
                 username
             }
         )
-
-        if(deo) {
+        const school = await School.findOne({_id: deo["school"]});
+        if(deo && school) {
             await bcrypt.compare(password, deo.password, (err, result) => {
                 if(result) {
-                    res.json("Match.");
+                    res.status(200).send({
+                        name: deo["username"],
+                        school_id: school["school_id"],
+                        school_Name: school["name"]
+                    });
                 } else {
-                    res.json(
+                    res.status(500).json(
                         {
                             message: "Incorrect password"
                         }

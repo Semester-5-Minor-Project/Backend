@@ -40,7 +40,7 @@ exports.addBatchStudents = async (req, res) => {
                 if (!students) {
                     throw new Error("Unable to insert data.");
                 }
-                res.json(
+                res.status(200).json(
                     {
                         message: "Inserted data successfully."
                     }
