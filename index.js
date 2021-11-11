@@ -3,6 +3,7 @@ const path = require("path");
 const morgan = require("morgan")
 const mongoose = require("mongoose");
 const fileUpload = require('express-fileupload');
+const cors = require("cors");
 
 require('dotenv').config()
 
@@ -32,6 +33,7 @@ app.use(express.json());
 app.use(fileUpload({
     useTempFiles: true
 }));
+app.use(cors());
 
 // static
 app.use(express.static(path.join(__dirname, "public")));

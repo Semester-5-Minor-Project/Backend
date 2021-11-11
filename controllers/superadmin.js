@@ -9,20 +9,26 @@ const SALTROUNDS = 5;
 const SECRET = process.env.HASH_SECRET;
 
 exports.getAdmin = async (req, res) => {
-    const { username, password } = req.body;
-
+    const { username, password } = req.params;
+    
     const admin = await SuperAdmin.findOne(
         {
             username,
             password: password
-        }
+        },
+        ["username"]
     )
 
     if(admin) {
-        console.log("admin found.");
-        return admin;
+        res.status(200).send({
+            username: admin["username"]
+        });
     } else {
-        console.log("not found.");
+        res.status(500).send(
+            {
+                "Message": "Invalid Credentials."
+            }
+        )
     }
 }
 
