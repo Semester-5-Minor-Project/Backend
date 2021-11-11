@@ -9,27 +9,46 @@ const SALTROUNDS = 5;
 const SECRET = process.env.HASH_SECRET;
 
 exports.addPrincipal = async (req, res) => {
-    const { emp_id, name } = req.body;
+    const { emp_id, name, school } = req.body;
     const nanoid = customAlphabet("123456789abcdefghijklmnopqrstuvwxyz", 4);
     const username = `principal-${nanoid()}`;
     const password = `${nanoid()}${nanoid()}`;
     const principal_id = `pri-${nanoid()}`;
 
-    await bcrypt.hash(password, SALTROUNDS, (err, hash) => {
-        const principal = Principal.create(
-            {
-                username,
-                password: hash,
-                emp_id,
-                name,
-                principal_id
+    try {
+        const school_id = await School.findOne({
+            school_id: school
+        }, ["_id"])
+
+        if (school_id) {
+            try {
+                await bcrypt.hash(password, SALTROUNDS, (err, hash) => {
+                    const principal = Principal.create(
+                        {
+                            username,
+                            password: hash,
+                            emp_id,
+                            name,
+                            principal_id
+                        }
+                    )
+
+                    if (!principal) {
+                        throw new Error("Failed to add Principal.");
+                    }
+
+                    res.status(200).json({
+                        username,
+                        password
+                    });
+                })
+            } catch (err) {
+                res.status(500).send(err);
             }
-        )
-        if (!principal) {
-            throw new Error("Failed to add Principal.");
         }
-        res.status(200).json(password);
-    })
+    } catch (err) {
+        res.status(500).send(err);
+    }
 }
 
 exports.getPrincipal = async (req, res) => {
@@ -44,8 +63,8 @@ exports.getPrincipal = async (req, res) => {
             bcrypt.compare(password, principal.password, (err, result) => {
                 if (result) {
                     res.status(200).send({
-                        id: principal["principal_id"], 
-                        name: principal["name"], 
+                        username: principal["principal_id"],
+                        name: principal["name"],
                         school: principal["school"]
                     });
                 } else {

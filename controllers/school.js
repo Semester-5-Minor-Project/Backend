@@ -6,43 +6,27 @@ const Student = require("../models/Student");
 const { customAlphabet } = require("nanoid");
 
 exports.addSchool = async (req, res) => {
-    const { name, address, email, contact_number, principal_name } = req.body;
+    const { name, address, email, contact_number } = req.body;
 
-    const principal = await Principal.findOne(
+    const nanoid = customAlphabet("123456789abcdefghijklmnopqrstuvwxyz", 4)
+    const school = await School.create(
         {
-            name : principal_name
+            name,
+            address,
+            email,
+            contact_number,
+            school_id: `sch-${nanoid()}`
         }
     )
-    if(principal) {
-        const nanoid = customAlphabet("123456789abcdefghijklmnopqrstuvwxyz", 4)
-        const school = await School.create(
+
+    if (school) {
+        res.status(200).json(
             {
-                name,
-                address,
-                email,
-                contact_number,
-                principal,
-                school_id : `sch-${nanoid()}`
+                message: "School added."
             }
         )
-
-        await principal.update(
-            {
-                school
-            }
-        )
-
-        if(school) {
-            res.status(200).json(
-                {
-                    message: "School added."
-                }
-            )
-        } else {
-            throw new Error("Failed to add school.");
-        }
     } else {
-        throw new Error("No such principal exists.");
+        throw new Error("Failed to add school.");
     }
 }
 
@@ -50,7 +34,7 @@ exports.listSchools = async (req, res) => {
     try {
         const schools = await School.find({}, ["school_id", "name", "address"]);
         res.send(schools);
-    } catch(err) {
+    } catch (err) {
         res.status(500).send(err);
     }
 }
@@ -61,11 +45,11 @@ exports.listStudentsBySchool = async (req, res) => {
     try {
         const school = await School.find(
             {
-                school_id 
+                school_id
             },
         );
 
-        if(!school) {
+        if (!school) {
             res.status(500).json(
                 {
                     message: "No such school exists."
@@ -78,7 +62,7 @@ exports.listStudentsBySchool = async (req, res) => {
                 }
             );
 
-            if(!students || students.length == 0) {
+            if (!students || students.length == 0) {
                 res.status(500).json(
                     {
                         message: "No students in this school."
@@ -88,7 +72,7 @@ exports.listStudentsBySchool = async (req, res) => {
                 res.status(200).json(students);
             }
         }
-    } catch(err) {
+    } catch (err) {
         console.log(err);
     }
 }

@@ -7,7 +7,7 @@ const SALTROUNDS = 5;
 const SECRET = process.env.HASH_SECRET;
 
 exports.getDSE = async (req, res) => {
-    const { username, password } = req.body;
+    const { username, password } = req.params;
     
     const dse = await DSEUT.findOne(
         {
@@ -18,7 +18,9 @@ exports.getDSE = async (req, res) => {
     if(dse) {
         bcrypt.compare(password, dse.password, (err, result) => {
             if(result) {
-                res.status(200).send(dse["username"]);
+                res.status(200).send({
+                    username: dse["username"]
+                });
             } else {
                 res.status(500).json(
                     {

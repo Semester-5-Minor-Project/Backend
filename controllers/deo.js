@@ -60,7 +60,7 @@ exports.getDeo = async (req, res) => {
             await bcrypt.compare(password, deo.password, (err, result) => {
                 if(result) {
                     res.status(200).send({
-                        name: deo["username"],
+                        username: deo["username"],
                         school_id: school["school_id"],
                         school_Name: school["name"]
                     });
