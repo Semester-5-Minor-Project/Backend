@@ -15,6 +15,7 @@ const schoolRouter = require("./routes/school");
 const principalRouter = require("./routes/principal");
 const deoRouter = require("./routes/deoschool");
 const studentRouter = require("./routes/student");
+const teacherRouter = require("./routes/teacher");
 
 const app = express();
 
@@ -46,6 +47,7 @@ app.use("/school", schoolRouter);
 app.use("/principal", principalRouter);
 app.use("/deo", deoRouter);
 app.use("/student", studentRouter);
+app.use("/teacher", teacherRouter);
 
 const PORT = 5000 | process.env.PORT;
 

@@ -30,6 +30,11 @@ const teacherSchema = new mongoose.Schema(
             type: String,
             enum: ["Male", "Female", "Transgender", "Other"]
         },
+        courses: {
+            type: [String],
+            required: false
+        },
+        email: String,
         caste: String,
         designation: String
     }
