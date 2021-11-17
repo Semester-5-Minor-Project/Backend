@@ -36,7 +36,8 @@ const studentSchema = new mongoose.Schema(
         },
         CWSN_status: {
             type: Boolean,
-            required: true
+            required: true,
+            default: false
         },
         CWSN_category: {
             type: String,

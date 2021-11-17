@@ -15,7 +15,6 @@ exports.upload = async (req, res, next) => {
                 use_filename: true,
                 resource_type: 'auto'
             });
-            console.log(result);
             req.body.public_id = result.public_id;
             req.body.link = result.secure_url;
             next();
