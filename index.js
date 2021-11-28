@@ -16,6 +16,8 @@ const principalRouter = require("./routes/principal");
 const deoRouter = require("./routes/deoschool");
 const studentRouter = require("./routes/student");
 const teacherRouter = require("./routes/teacher");
+const incentiveRouter = require("./routes/incentive");
+const academicsRouter = require("./routes/academics");
 
 const app = express();
 
@@ -48,6 +50,8 @@ app.use("/principal", principalRouter);
 app.use("/deo", deoRouter);
 app.use("/student", studentRouter);
 app.use("/teacher", teacherRouter);
+app.use("/incentive", incentiveRouter);
+app.use("/academics", academicsRouter);
 
 const PORT = 5000 | process.env.PORT;
 
