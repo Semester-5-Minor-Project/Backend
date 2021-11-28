@@ -19,7 +19,7 @@ const academicsSchema = new mongoose.Schema(
                     {
                         date: {
                             type: String,
-                            required,
+                            required: true,
                         },
                         status: {
                             type: String,
@@ -31,19 +31,10 @@ const academicsSchema = new mongoose.Schema(
                 course: [
                     {
                         course_id: String,
-                        course_name: String,
-                        teacher: {
-                            type: ObjectId,
-                            ref: "Teacher"
-                        },
-                        scores: [
-                            {
-                                max_marks: Number,
-                                obtained_marks: Number,
-                                eval_name: String,
-                                weightage: Number
-                            }
-                        ]
+                        status: {
+                            type: String,
+                            enum: ["P", "F"]
+                        }
                     }
                 ],
                 // Promotion, Retention, Transfer, Migration

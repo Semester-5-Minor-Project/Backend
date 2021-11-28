@@ -2,6 +2,7 @@ const Teacher = require("../models/Teacher");
 const SchoolModel = require("../models/School");
 
 const { customAlphabet } = require("nanoid");
+
 exports.addTeacher = async (req, res) => {
     const nanoid = customAlphabet("abcdefghijklmnopqrstuvwxyz0123456789", 6);
     const { fullName, DOB, School, gender, eid, designation, email } = req.body;
@@ -64,6 +65,76 @@ exports.listTeachersBySchool = async (req, res) => {
             res.status(500).json(
                 {
                     message: "No such School exists."
+                }
+            )
+        }
+    } catch(err) {
+        console.log(err);
+    }
+}
+
+exports.assignCourses = async (req, res) => {
+    const { courses_assigned, teacher_id } = req.body;
+
+    try {
+        const teacher = await Teacher.updateOne({ teacher_id }, {
+            $push: {
+                courses: courses_assigned
+            }
+        })
+
+        if(teacher) {
+            res.status(200).send(teacher);
+        } else {
+            res.status(200).send(
+                {
+                    message: "Unable to assign courses"
+                }
+            )
+        }
+    } catch(err) {
+        console.log(err);
+    }
+}
+
+exports.removeCourses = async (req, res) => {
+    const { courses_remove, teacher_id } = req.body;
+
+    try {
+        const teacher = await Teacher.updateOne({ teacher_id }, {
+            $pull: {
+                courses: {
+                    $in: courses_remove 
+                }
+            }
+        })
+
+        if(teacher) {
+            res.status(200).send(teacher);
+        } else {
+            res.status(200).send(
+                {
+                    message: "Unable to assign courses"
+                }
+            )
+        }
+    } catch(err) {
+        console.log(err);
+    }
+}
+
+exports.listCourses = async (req, res) => {
+    const { teacher_id } = req.query;
+    
+    try {
+        const courses = await Teacher.find({ teacher_id }, ["courses"])
+
+        if(courses) {
+            res.status(200).send(courses);
+        } else {
+            res.status(200).send(
+                {
+                    message: "Unable to fetch courses."
                 }
             )
         }
