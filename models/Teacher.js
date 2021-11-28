@@ -32,7 +32,8 @@ const teacherSchema = new mongoose.Schema(
         },
         courses: {
             type: [String],
-            required: false
+            required: false,
+            default: []
         },
         email: String,
         caste: String,
