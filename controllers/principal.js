@@ -62,13 +62,15 @@ exports.getPrincipal = async (req, res) => {
             username
         });
 
+        const school = await School.findOne({ principal: principal["_id"] }, ["name"]);
+
         if (principal) {
             bcrypt.compare(password, principal.password, (err, result) => {
                 if (result) {
                     res.status(200).send({
                         username: principal["principal_id"],
                         name: principal["name"],
-                        school: principal["school"]
+                        school: school["name"]
                     });
                 } else {
                     res.status(200).json(
