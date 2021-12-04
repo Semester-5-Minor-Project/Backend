@@ -22,7 +22,7 @@ exports.getDSE = async (req, res) => {
                     username: dse["username"]
                 });
             } else {
-                res.status(500).json(
+                res.status(200).json(
                     {
                         message: "Incorrect password"
                     }
@@ -30,7 +30,7 @@ exports.getDSE = async (req, res) => {
             }
         })
     } else {
-        res.status(500).json(
+        res.status(200).json(
             {
                 message: "No such user exists"
             }

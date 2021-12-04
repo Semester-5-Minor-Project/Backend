@@ -24,9 +24,9 @@ exports.getAdmin = async (req, res) => {
             username: admin["username"]
         });
     } else {
-        res.status(500).send(
+        res.status(200).send(
             {
-                "Message": "Invalid Credentials."
+                "message": "Invalid Credentials."
             }
         )
     }

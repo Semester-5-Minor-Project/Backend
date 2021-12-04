@@ -1,8 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const { addBatchIncentives, addIncentive } = require("../controllers/incentive.js");
+const { addBatchIncentives, addIncentive, getIncentiveInfoSchool } = require("../controllers/incentive.js");
 
 router.post("/single", addIncentive);
-router.post("/batch", addBatchIncentives)
+router.post("/batch", addBatchIncentives);
+router.get("/info/get/school", getIncentiveInfoSchool);
 
 module.exports = router;

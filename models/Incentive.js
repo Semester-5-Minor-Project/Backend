@@ -21,6 +21,7 @@ const incentiveSchema = new mongoose.Schema(
             month: {
                 type: String
             },
+            year: String,
             status: {
                 type: String,
                 enum: ["Y", "N"]
@@ -30,6 +31,7 @@ const incentiveSchema = new mongoose.Schema(
             month: {
                 type: String
             },
+            year: String,
             status: {
                 type: String,
                 enum: ["Y", "N"]

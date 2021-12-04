@@ -90,25 +90,26 @@ exports.addAcademicInfo = async (req, res) => {
 }
 
 exports.getAcademicInfo = async (req, res) => {
-    const { student_id, year } = req.body;
+    const { student_id, year } = req.params;
 
     try {
         const student = await Student.find({ student_id: student_id }, ["_id"]);
         const academics = await Academics.find({ student_id: student, "academics.year": year }, [
             "academics.$"
         ])
+        const school = await School.findById(academics[0]["academics"][0]["school"], ["name"]);
 
         if (academics && academics.length) {
-            res.status(200).send(academics);
+            res.status(200).send([academics, { school_name: school["name"] }]);
         } else {
-            res.status(200).send(
+            res.status(204).send(
                 {
-                    message: "Unable to add."
+                    message: "No match found."
                 }
             )
         }
     } catch (err) {
-        console.log(err);
+        res.status(204).send();
     }
 }
 
@@ -126,10 +127,33 @@ exports.getStudentsInClass = async (req, res) => {
             student_list.push(s["student_id"]);
         })
 
-        const student_id_list = await Student.find({"_id" : {"$in" : student_list}}, ["student_id", "fullName"]);
-        
+        const student_id_list = await Student.find({ "_id": { "$in": student_list } }, ["student_id", "fullName"]);
+
         res.status(200).send(student_id_list);
     } catch (err) {
         console.log(err);
+    }
+}
+
+exports.getAcademicInfoSchoolYearClass = async (req, res) => {
+    const { school_id, year, class_num } = req.query;
+
+    try {
+        const school = await School.find({ school_id: school_id }, ["_id"]);
+        const students = await Academics.find({
+            "academics.school": school,
+            "academics.class": class_num,
+            "academics.year": year
+        },
+        ["academics.$"]
+        );
+
+        if (students) {
+            res.status(200).send(students);
+        } else {
+            res.status(204).send();
+        }
+    } catch (err) {
+
     }
 }

@@ -22,8 +22,8 @@ exports.addPrincipal = async (req, res) => {
 
         if (school_id) {
             try {
-                await bcrypt.hash(password, SALTROUNDS, (err, hash) => {
-                    const principal = Principal.create(
+                bcrypt.hash(password, SALTROUNDS, async (err, hash) => {
+                    const principal = await Principal.create(
                         {
                             username,
                             password: hash,
@@ -32,11 +32,14 @@ exports.addPrincipal = async (req, res) => {
                             principal_id
                         }
                     )
-
+                    
                     if (!principal) {
                         throw new Error("Failed to add Principal.");
                     }
-
+                    const school = await School.update({ id: school_id }, {
+                        principal: principal["_id"]
+                    })
+                    
                     res.status(200).json({
                         username,
                         password
@@ -68,7 +71,7 @@ exports.getPrincipal = async (req, res) => {
                         school: principal["school"]
                     });
                 } else {
-                    res.status(500).json(
+                    res.status(200).json(
                         {
                             message: "Incorrect password"
                         }
@@ -76,7 +79,7 @@ exports.getPrincipal = async (req, res) => {
                 }
             })
         } else {
-            res.status(500).json(
+            res.status(200).json(
                 {
                     message: "User does not exist."
                 }
@@ -89,7 +92,8 @@ exports.getPrincipal = async (req, res) => {
 
 exports.listPrincipals = async (req, res) => {
     try {
-        const principals = await Principal.find({}, "name");
+        const principals = await Principal.find({}, ["name", "emp_id"]);
+        
         res.send(principals);
     } catch (e) {
         console.log(e);

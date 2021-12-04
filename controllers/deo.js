@@ -65,7 +65,7 @@ exports.getDeo = async (req, res) => {
                         school_Name: school["name"]
                     });
                 } else {
-                    res.status(500).json(
+                    res.status(200).json(
                         {
                             message: "Incorrect password"
                         }
@@ -73,7 +73,7 @@ exports.getDeo = async (req, res) => {
                 }
             })
         } else {
-            res.status(500).json(
+            res.status(200).json(
                 {
                     message: "No such user exists."
                 }
