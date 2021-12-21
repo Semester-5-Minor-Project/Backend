@@ -157,3 +157,26 @@ exports.getAcademicInfoSchoolYearClass = async (req, res) => {
 
     }
 }
+
+exports.getCourseAcademicInfo = async (req, res) => {
+    const { course_id, school_id, class_num } = req.query;
+
+    try {
+        const school = await School.find({ school_id: school_id }, ["_id"]);
+        const students = await Academics.find({
+            "academics.school": school,
+            "academics.class": class_num,
+            "academics.course.course_id": course_id
+        },
+        ["academics.year", "academics.course.$"]
+        );
+
+        if (students) {
+            res.status(200).send(students);
+        } else {
+            res.status(204).send();
+        }
+    } catch (err) {
+
+    }
+}
